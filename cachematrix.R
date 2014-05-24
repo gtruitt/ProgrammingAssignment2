@@ -12,7 +12,7 @@
 makeCacheMatrix <- function(mtx = matrix()) {
     inverse <- NULL
 
-    # overwrites the matrix (mtx) with the value in new_ntx,
+    # overwrites the matrix (mtx) with the value in new_mtx,
     # sets inverse to NULL so that it will be re-computed
     set <- function(new_mtx) {
         mtx <<- new_mtx
@@ -40,7 +40,7 @@ makeCacheMatrix <- function(mtx = matrix()) {
         inverse
     }
     
-    # return the container for all these functions,
+    # return the container for these functions,
     # which is really just a list
     list(set = set,
          get = get,
