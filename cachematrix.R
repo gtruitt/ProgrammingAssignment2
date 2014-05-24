@@ -12,8 +12,8 @@
 makeCacheMatrix <- function(mtx = matrix()) {
     inverse <- NULL
 
-    # overwrites the matrix (mtx) with the value in new_mtx,
-    # sets inverse to NULL so that it will be re-computed
+    # sets the value of the matrix (mtx),
+    # sets the inverse to NULL so it will be re-computed
     set <- function(new_mtx) {
         mtx <<- new_mtx
         inverse <<- NULL
@@ -24,22 +24,16 @@ makeCacheMatrix <- function(mtx = matrix()) {
         mtx
     }
 
-    # sets the cached inverse
+    # sets the value of the inverse
     setInverse <- function(new_inverse) {
         inverse <<- new_inverse
     }
 
-    # if the inverse is currently NULL,
-    # compute and store it for future use;
-    # either way, return its value at the end
+    # returns the current value of the inverse
     getInverse <- function() {
-        if(inverse == NULL)
-        {
-            inverse <- solve(mtx)
-        }
         inverse
     }
-    
+
     # return the container for these functions,
     # which is really just a list
     list(set = set,
@@ -48,7 +42,24 @@ makeCacheMatrix <- function(mtx = matrix()) {
          getInverse = getInverse)
 }
 
-## Write a short comment describing this function
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+## This function creates a special "matrix", which is really
+## just a list of functions, allowing us to:
+cacheSolve <- function(cache_mtx, ...) {
+    # get the current value of inverse
+    inverse <- cache_mtx$getInverse()
+
+    # if inverse is NULL, compute and set its value
+    if(is.null(inverse)) {
+        mtx <- cache_mtx$get()
+        inverse <- mean(mtx, ...)
+        cache_mtx$setInverse(inverse)
+    }
+    # else, inverse has a value; let the caller know
+    # that we're going to return that cached value
+    else {
+        message("getting cached data")
+    }
+    
+    # either way, return the value of inverse
+    inverse
 }
