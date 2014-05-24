@@ -1,5 +1,5 @@
-## These functions allow for the creation of a special "matrix"
-## which caches its inverse after computing it, allowing us to
+## These functions allow us to create a special "matrix"
+## and cache its inverse after computing it, allowing us to
 ## save compute cycles by using the cached value in situations
 ## where the inverse would normally be computed multiple times
 
@@ -42,8 +42,9 @@ makeCacheMatrix <- function(mtx = matrix()) {
          getInverse = getInverse)
 }
 
-## This function creates a special "matrix", which is really
-## just a list of functions, allowing us to:
+## This function takes a CacheMatrix and returns its inverse;
+## if a cached inverse is available, it returns that value,
+## otherwise it computes and caches the inverse before returning it
 cacheSolve <- function(cache_mtx, ...) {
     # get the current value of inverse
     inverse <- cache_mtx$getInverse()
@@ -51,7 +52,7 @@ cacheSolve <- function(cache_mtx, ...) {
     # if inverse is NULL, compute and set its value
     if(is.null(inverse)) {
         mtx <- cache_mtx$get()
-        inverse <- mean(mtx, ...)
+        inverse <- solve(mtx, ...)
         cache_mtx$setInverse(inverse)
     }
     # else, inverse has a value; let the caller know
